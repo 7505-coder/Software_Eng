@@ -1,0 +1,18 @@
+flowchart TD
+  Start([Student opens menu]) --> Browse[Browse and filter active menu]
+  Browse --> Select[Add available items to cart]
+  Select --> Submit[Submit order]
+  Submit --> SignIn{Student signed in?}
+  SignIn -- No --> Login[Sign in or register]
+  Login --> Submit
+  SignIn -- Yes --> Validate[Validate IDs, quantities and note]
+  Validate --> Valid{Input valid?}
+  Valid -- No --> Error[Show validation error]
+  Valid -- Yes --> Check[Recheck item activity, availability and prices]
+  Check --> Available{All available?}
+  Available -- No --> Conflict[Reject order and ask student to refresh]
+  Available -- Yes --> Save[Save order, lines and initial event atomically]
+  Save --> Confirmation[Show code and pending status]
+  Error --> Browse
+  Conflict --> Browse
+  Confirmation --> End([Track status])

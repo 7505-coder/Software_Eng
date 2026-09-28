@@ -1,0 +1,26 @@
+flowchart LR
+  Visitor[Visitor]
+  Student[Student]
+  Staff[Canteen staff]
+  Admin[Administrator]
+  subgraph System[Campus Canteen Pre-Order System]
+    UC1([Browse menu and availability])
+    UC2([Register and sign in])
+    UC3([Manage cart and place order])
+    UC4([View own orders and status])
+    UC5([Process queue and update status])
+    UC6([View daily dashboard])
+    UC7([Add or edit menu])
+    UC8([Change availability or archive item])
+  end
+  Visitor --> UC1
+  Visitor --> UC2
+  Student --> UC1
+  Student --> UC3
+  Student --> UC4
+  Staff --> UC5
+  Staff --> UC6
+  Admin --> UC5
+  Admin --> UC6
+  Admin --> UC7
+  Admin --> UC8

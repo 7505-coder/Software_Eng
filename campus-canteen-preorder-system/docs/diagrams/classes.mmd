@@ -1,0 +1,50 @@
+classDiagram
+  class User {
+    +int id
+    +string name
+    +string email
+    +Role role
+    +authenticate(password)
+  }
+  class MenuItem {
+    +int id
+    +string name
+    +string category
+    +int pricePaise
+    +bool available
+    +bool active
+  }
+  class Order {
+    +int id
+    +string publicCode
+    +OrderStatus status
+    +int totalPaise
+    +transition(target, actor)
+  }
+  class OrderItem {
+    +int quantity
+    +string itemNameSnapshot
+    +int unitPriceSnapshot
+    +lineTotal()
+  }
+  class OrderEvent {
+    +OrderStatus status
+    +string message
+    +datetime createdAt
+  }
+  class CanteenService {
+    +placeOrder(student, cart)
+    +changeStatus(staff, order, target)
+    +updateAvailability(admin, item)
+  }
+  class SQLiteRepository {
+    +saveOrder(order)
+    +listStudentOrders(studentId)
+    +listQueue()
+  }
+  User "1" --> "0..*" Order : owns
+  Order "1" *-- "1..*" OrderItem : contains
+  MenuItem "0..1" <-- "0..*" OrderItem : current reference
+  Order "1" *-- "1..*" OrderEvent : history
+  User "0..1" --> "0..*" OrderEvent : actor
+  CanteenService ..> SQLiteRepository : uses

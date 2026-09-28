@@ -1,0 +1,18 @@
+flowchart TB
+  subgraph Browser[Student and staff browser]
+    HTML[HTML template]
+    JS[Vanilla JavaScript client]
+    CSS[Responsive CSS]
+    HTML --> JS
+    CSS --> HTML
+  end
+  subgraph Server[Flask application]
+    Routes[JSON routes]
+    Auth[Session, CSRF and role checks]
+    Rules[Validation, pricing and order-state rules]
+    Routes --> Auth --> Rules
+  end
+  DB[(SQLite database)]
+  Browser <-->|Same-origin JSON and session cookie| Routes
+  Rules <-->|SQL transactions and snapshots| DB
+  Poll[12-second in-page status polling] --> JS

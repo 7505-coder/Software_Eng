@@ -1,0 +1,35 @@
+flowchart LR
+  S[Student]
+  T[Canteen staff]
+  A[Administrator]
+  P1((P1 Identity and access))
+  P2((P2 Browse menu))
+  P3((P3 Place and view order))
+  P4((P4 Process queue))
+  P5((P5 Maintain menu and report))
+  D1[(D1 Users)]
+  D2[(D2 Menu items)]
+  D3[(D3 Orders and order lines)]
+  D4[(D4 Order events)]
+  S -->|credentials/session| P1
+  P1 <--> D1
+  P1 -->|student role| P3
+  S -->|search/filter| P2
+  P2 <--> D2
+  P2 -->|menu and availability| S
+  S -->|cart, quantity, pickup note| P3
+  P3 -->|price/availability read| D2
+  P3 <--> D3
+  P3 -->|initial status event| D4
+  P3 -->|confirmation and status| S
+  T -->|allowed state change| P4
+  P4 <--> D3
+  P4 -->|status event| D4
+  P4 -->|queue and status| T
+  P4 -->|ready status| S
+  A -->|item edits and availability| P5
+  P5 <--> D2
+  P5 -->|menu confirmation| A
+  T -->|dashboard request| P5
+  P5 -->|aggregate queue and sales| D3
+  P5 -->|daily summary| T

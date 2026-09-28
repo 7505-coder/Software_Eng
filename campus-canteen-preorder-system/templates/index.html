@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#173d35">
+  <title>Campus Canteen | Pre-order</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <script defer src="{{ url_for('static', filename='app.js') }}"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="Campus Canteen home">
+      <span class="brand-mark" aria-hidden="true">CC</span>
+      <span><strong>Campus Canteen</strong><small>Good food, less waiting</small></span>
+    </a>
+    <div class="topbar-actions">
+      <span id="userBadge" class="user-badge" hidden></span>
+      <button id="ordersToggle" class="button button-quiet" type="button" hidden>My orders</button>
+      <button id="authOpen" class="button button-light" type="button">Sign in</button>
+      <button id="logoutButton" class="button button-quiet" type="button" hidden>Sign out</button>
+    </div>
+  </header>
+
+  <main class="page-shell">
+    <section class="welcome-row" aria-labelledby="welcomeTitle">
+      <div>
+        <p class="eyebrow">PRE-ORDER · PICK UP · ENJOY</p>
+        <h1 id="welcomeTitle">Your break is for you.</h1>
+        <p class="welcome-copy">Browse today's canteen menu and place an order before you reach the counter.</p>
+      </div>
+      <div class="service-note"><span class="pulse-dot" aria-hidden="true"></span><span>Order status updates in this page</span></div>
+    </section>
+
+    <section id="dashboard" class="dashboard" aria-label="Canteen dashboard" hidden></section>
+
+    <section class="workspace" aria-label="Canteen ordering">
+      <div class="menu-column">
+        <div class="section-heading">
+          <div><p class="eyebrow">MADE FRESH TODAY</p><h2>Menu</h2></div>
+          <label class="search-box"><span class="sr-only">Search menu</span><span aria-hidden="true">⌕</span><input id="menuSearch" type="search" placeholder="Search dishes" autocomplete="off"></label>
+        </div>
+        <div id="categoryFilters" class="category-filters" aria-label="Filter menu by category"></div>
+        <div id="menuGrid" class="menu-grid" aria-live="polite"></div>
+      </div>
+
+      <aside class="cart-column" aria-labelledby="cartTitle">
+        <div class="cart-card">
+          <div class="cart-heading"><div><p class="eyebrow">YOUR SELECTION</p><h2 id="cartTitle">Your order</h2></div><span id="cartCount" class="count-badge">0</span></div>
+          <div id="cartItems" class="cart-items"><p class="empty-state">Your basket is waiting for something tasty.</p></div>
+          <div class="checkout-fields">
+            <label>Pickup time <span class="optional">(optional)</span><input id="pickupSlot" type="text" maxlength="40" placeholder="e.g. 12:45 PM"></label>
+            <label>Note for the canteen <span class="optional">(optional)</span><textarea id="orderNote" rows="2" maxlength="300" placeholder="Allergies or a short request"></textarea></label>
+          </div>
+          <div class="total-row"><span>Estimated total</span><strong id="cartTotal">₹0.00</strong></div>
+          <p class="payment-note">Pay at the pickup counter.</p>
+          <button id="checkoutButton" class="button button-primary button-wide" type="button" disabled>Place order</button>
+          <p class="fine-print">Prices and availability are confirmed when your order is placed.</p>
+        </div>
+
+        <section id="staffPanel" class="staff-panel" hidden aria-labelledby="staffTitle">
+          <div class="cart-heading"><div><p class="eyebrow">CANTEEN CONSOLE</p><h2 id="staffTitle">Order queue</h2></div><button id="refreshOrders" class="icon-button" type="button" aria-label="Refresh order queue">↻</button></div>
+          <div id="staffOrders" class="order-list"></div>
+          <div id="adminMenuPanel" class="admin-menu-panel" hidden>
+            <h3>Menu management</h3>
+            <form id="menuForm" class="menu-form">
+              <label>Item name<input name="name" required minlength="2" maxlength="80"></label>
+              <label>Category<input name="category" required minlength="2" maxlength="40" placeholder="Snacks"></label>
+              <label>Price (₹)<input name="price" type="number" required min="0" max="1000" step="0.50"></label>
+              <label>Description<input name="description" maxlength="240"></label>
+              <button class="button button-primary" type="submit">Add menu item</button>
+            </form>
+            <div id="menuAdminList" class="menu-admin-list"></div>
+          </div>
+        </section>
+      </aside>
+    </section>
+
+    <section id="studentOrders" class="student-orders" hidden aria-labelledby="studentOrdersTitle">
+      <div class="section-heading"><div><p class="eyebrow">YOUR RECENT ACTIVITY</p><h2 id="studentOrdersTitle">My orders</h2></div></div>
+      <div id="myOrdersList" class="order-list order-list-student"></div>
+    </section>
+
+    <footer class="page-footer"><span>Campus Canteen Pre-Order System</span><span>Prototype · Local demonstration</span></footer>
+  </main>
+
+  <dialog id="authDialog" class="auth-dialog" aria-labelledby="authTitle">
+    <form method="dialog"><button class="dialog-close" aria-label="Close sign in">×</button></form>
+    <p class="eyebrow">WELCOME TO THE CANTEEN</p>
+    <h2 id="authTitle">Sign in</h2>
+    <p id="authIntro" class="muted">Sign in to place an order and track pickup status.</p>
+    <div class="auth-tabs" role="tablist" aria-label="Account action">
+      <button id="loginTab" class="auth-tab active" type="button" role="tab" aria-selected="true">Sign in</button>
+      <button id="registerTab" class="auth-tab" type="button" role="tab" aria-selected="false">Create student account</button>
+    </div>
+    <form id="authForm" class="auth-form">
+      <label id="nameField" hidden>Your name<input name="name" autocomplete="name" maxlength="80"></label>
+      <label>Campus email<input name="email" type="email" autocomplete="username" required maxlength="160"></label>
+      <label>Password<input name="password" type="password" autocomplete="current-password" required minlength="8" maxlength="128"></label>
+      <p id="authError" class="form-error" role="alert" hidden></p>
+      <button id="authSubmit" class="button button-primary button-wide" type="submit">Sign in</button>
+    </form>
+    <div class="demo-accounts"><strong>Demo accounts</strong><span>Student · student@campus.edu / student123</span><span>Staff · staff@campus.edu / staff123</span><span>Admin · admin@campus.edu / admin123</span></div>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+</body>
+</html>

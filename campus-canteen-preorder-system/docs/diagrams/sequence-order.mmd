@@ -1,0 +1,22 @@
+sequenceDiagram
+  actor Student
+  participant UI as Browser UI
+  participant API as Flask API
+  participant Auth as Session and role check
+  participant DB as SQLite
+  Student->>UI: Submit cart and pickup note
+  UI->>API: POST /api/orders + CSRF token
+  API->>Auth: Validate session and student role
+  Auth-->>API: Student identity
+  API->>DB: BEGIN IMMEDIATE
+  API->>DB: Read current availability and prices
+  alt Any item missing or unavailable
+    DB-->>API: Missing/unavailable item
+    API->>DB: ROLLBACK
+    API-->>UI: 409 with refresh message
+  else Cart valid
+    API->>DB: Insert order, price snapshots, initial event
+    API->>DB: COMMIT
+    API-->>UI: 201 order confirmation
+    UI-->>Student: Show order code and pending status
+  end

@@ -1,0 +1,11 @@
+flowchart LR
+  Student[Student]
+  Staff[Canteen staff]
+  Admin[Administrator]
+  System[[Campus Canteen Pre-Order System]]
+  Student -->|registration, login, menu query, cart/order| System
+  System -->|menu, availability, order status, ready update| Student
+  Staff -->|status changes, queue refresh| System
+  System -->|order queue, student pickup details, dashboard| Staff
+  Admin -->|menu edits, availability, archive| System
+  System -->|menu confirmation, daily summary| Admin

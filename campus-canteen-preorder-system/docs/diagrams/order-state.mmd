@@ -1,0 +1,11 @@
+stateDiagram-v2
+  [*] --> Pending : student places order
+  Pending --> Accepted : staff accepts
+  Pending --> Cancelled : staff cancels
+  Accepted --> Preparing : staff starts preparation
+  Accepted --> Cancelled : staff cancels
+  Preparing --> Ready : staff marks ready
+  Preparing --> Cancelled : staff cancels
+  Ready --> Completed : pickup handed over
+  Completed --> [*]
+  Cancelled --> [*]
